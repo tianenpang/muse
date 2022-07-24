@@ -1,0 +1,14 @@
+.next
+.swc
+.husky
+.vercel
+.github
+out
+dist
+public
+node_modules
+pnpm-lock.yaml
+artifacts
+cache
+coverage*
+gasReporterOutput.json
