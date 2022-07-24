@@ -4,6 +4,7 @@ import type { CSS } from '@nextui-org/react';
 export const cardStyles: { [key: string]: CSS } = {
   card: {
     $$cardColor: 'transparent',
+    us: 'none',
     w: '100%',
     h: '400px',
     transition: '$background, $transform, $filter, $borderColor, $boxShadow'

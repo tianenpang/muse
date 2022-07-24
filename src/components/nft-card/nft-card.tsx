@@ -85,7 +85,7 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
     cleanState();
     if (isLoading) return;
     await contractDelegate.writeAsync({ args: [item.id], overrides: { value: parseEther(item.price) } });
-  }, [contractDelegate, isLoading, item.id, item.price]);
+  }, [cleanState, contractDelegate, isLoading, item.id, item.price]);
 
   return (
     <Fragment>
