@@ -7,6 +7,7 @@ export const cardStyles: { [key: string]: CSS } = {
     us: 'none',
     w: '100%',
     h: '400px',
+    position: 'relative',
     transition: '$background, $transform, $filter, $borderColor, $boxShadow'
   },
   header: {
