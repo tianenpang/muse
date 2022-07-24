@@ -13,7 +13,8 @@
     "create-local:graph": "graph create --node http://localhost:8020/ tianenpang/muse",
     "remove-local:graph": "graph remove --node http://localhost:8020/ tianenpang/muse",
     "deploy-local:graph": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 tianenpang/muse",
-    "test:graph": "graph test"
+    "test:graph": "graph test",
+    "build": "pnpm codegen:graph && build:site"
   },
   "dependencies": {
     "@nextui-org/react": "^1.0.0-beta.9",
