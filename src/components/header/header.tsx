@@ -13,7 +13,7 @@ export const Header: FC<HeaderProps> = (props: HeaderProps) => {
   const navs = useMemo<LinkItem[]>(() => {
     return [
       { name: 'Home', href: '/' },
-      { name: 'Mint', href: '/mint' }
+      { name: 'Create', href: '/create' }
     ];
   }, []);
 

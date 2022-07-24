@@ -6,11 +6,11 @@ import { useContractWrite, useWaitForTransaction } from 'wagmi';
 import { Dropzone, useToast } from '@components';
 import { useIPFS } from '@hooks';
 import { contract } from '@lib';
-import { buttonStyles, containerStyles, StyledForm } from './mint.styles';
+import { buttonStyles, containerStyles, StyledForm } from './create.styles';
 import type { NextPage } from 'next';
 import type { FormEvent } from 'react';
 
-const MintPage: NextPage<MintPageProps> = (props: MintPageProps) => {
+const CreatePage: NextPage<CreatePageProps> = (props: CreatePageProps) => {
   const {} = props;
 
   const { showToast } = useToast();
@@ -24,7 +24,7 @@ const MintPage: NextPage<MintPageProps> = (props: MintPageProps) => {
     clearErrors,
     handleSubmit,
     formState: { errors }
-  } = useForm<MintData>({ mode: 'onChange' });
+  } = useForm<CreateData>({ mode: 'onChange' });
 
   const contractMint = useContractWrite({
     ...contract.muse.config,
@@ -51,7 +51,7 @@ const MintPage: NextPage<MintPageProps> = (props: MintPageProps) => {
     [setValue]
   );
 
-  const submitHandler = handleSubmit(async (data: MintData) => {
+  const submitHandler = handleSubmit(async (data: CreateData) => {
     if (isLoading) return;
     const { name, description, price, thumbnail, audio } = data;
     const CID = await store({ name, description, price, thumbnail, audio });
@@ -130,7 +130,7 @@ const MintPage: NextPage<MintPageProps> = (props: MintPageProps) => {
           />
           <Button type="submit" color="primary" size="lg" auto css={buttonStyles}>
             {isLoading && <Loading color="currentColor" size="sm" />}
-            {isStoreLoading ? 'Uploading to IPFS...' : isLoading ? 'Minting and wait for transaction...' : 'Mint'}
+            {isStoreLoading ? 'Uploading to IPFS...' : isLoading ? 'Creating and wait for transaction...' : 'Create'}
           </Button>
         </StyledForm>
       </Container>
@@ -138,7 +138,7 @@ const MintPage: NextPage<MintPageProps> = (props: MintPageProps) => {
   );
 };
 
-interface MintData {
+interface CreateData {
   name: string;
   description: string;
   price: number;
@@ -146,6 +146,6 @@ interface MintData {
   audio: File;
 }
 
-interface MintPageProps {}
+interface CreatePageProps {}
 
-export default MintPage;
+export default CreatePage;
