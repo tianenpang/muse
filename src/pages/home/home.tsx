@@ -33,7 +33,7 @@ export const GridCard: FC<GridCardProps> = (props: GridCardProps) => {
       <Grid.Container gap={4}>
         {data.map((item) => (
           <Grid key={item.ipfsCID} xs={12} sm={6} md={4}>
-            <NFTCard item={item} />
+            <NFTCard item={item} rentable />
           </Grid>
         ))}
       </Grid.Container>

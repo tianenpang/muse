@@ -1,6 +1,7 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Card, Col, Loading, Progress, Row, Text } from '@nextui-org/react';
 import { parseEther } from 'ethers/lib/utils';
+import { default as useDownloader } from 'react-use-downloader';
 import { useContractWrite, useWaitForTransaction } from 'wagmi';
 import { useToast } from '@components/provider';
 import { contract } from '@lib';
@@ -9,7 +10,9 @@ import type { NFTItem } from '@lib';
 import type { FC } from 'react';
 
 export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
-  const { item } = props;
+  const { item, rentable, downloadable, withdrawable } = props;
+
+  const { percentage, isInProgress, download, cancel } = useDownloader();
 
   const { showToast } = useToast();
 
@@ -88,6 +91,11 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
     await contractDelegate.writeAsync({ args: [item.tokenID], overrides: { value: parseEther(item.price) } });
   }, [cleanState, contractDelegate, isLoading, item.tokenID, item.price]);
 
+  const toggleDownloadHandler = useCallback(async () => {
+    if (isInProgress) return cancel();
+    await download(audio.currentSrc, `${item.name}.${item.audio.type.split('/')[1]}`);
+  }, [isInProgress, audio.currentSrc, item.name, item.audio.type, cancel, download]);
+
   return (
     <Fragment>
       <Card variant="bordered" css={cardStyles.card}>
@@ -133,9 +141,49 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
               <Text css={cardStyles.text} size={12} b>
                 {item.price} MATIC
               </Text>
-              <Button color="secondary" auto flat onClick={() => rentHandler()}>
-                {isLoading ? <Loading color="currentColor" size="sm" /> : 'Rent'}
-              </Button>
+
+              {rentable && (
+                <Button
+                  css={{ '.nextui-button-text': { dflex: 'center', gap: '$md' } }}
+                  color="secondary"
+                  flat
+                  auto
+                  onClick={() => rentHandler()}
+                >
+                  {isLoading ? <Loading color="currentColor" size="sm" /> : 'Rent'}
+                </Button>
+              )}
+
+              {downloadable && (
+                <Button
+                  css={{ '.nextui-button-text': { dflex: 'center', gap: '$md' } }}
+                  color="secondary"
+                  flat
+                  auto
+                  onClick={() => toggleDownloadHandler()}
+                >
+                  {isInProgress ? (
+                    <>
+                      <Loading color="currentColor" size="sm" />
+                      {`${percentage}%`}
+                    </>
+                  ) : (
+                    'Download'
+                  )}
+                </Button>
+              )}
+
+              {withdrawable && (
+                <Button
+                  css={{ '.nextui-button-text': { dflex: 'center', gap: '$md' } }}
+                  color="secondary"
+                  flat
+                  auto
+                  onClick={() => {}}
+                >
+                  {isLoading ? <Loading color="currentColor" size="sm" /> : 'Withdraw'}
+                </Button>
+              )}
             </Row>
           </Col>
         </Card.Footer>
@@ -146,4 +194,7 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
 
 interface NFTCardProps {
   item: NFTItem;
+  rentable?: boolean;
+  downloadable?: boolean;
+  withdrawable?: boolean;
 }
