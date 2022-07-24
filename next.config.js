@@ -17,6 +17,12 @@ const nextConfig = {
   images: {
     domains: []
   },
+  eslint: {
+    ignoreDuringBuilds: true
+  },
+  typescript: {
+    ignoreBuildErrors: process.env.IS_VERCEL_PROD === 'true'
+  },
   async redirects() {
     return [
       {
