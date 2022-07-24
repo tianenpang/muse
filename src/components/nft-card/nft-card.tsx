@@ -44,6 +44,13 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
     setCurrentTime(audio.currentTime);
   }, [audio]);
 
+  const cleanState = useCallback(() => {
+    audio.pause();
+    setDuration(0);
+    setCurrentTime(0);
+    setIsPlay(false);
+  }, [audio, setDuration, setCurrentTime, setIsPlay]);
+
   useEffect(() => {
     audio.addEventListener('loadedmetadata', loadedMetadataHandler);
     audio.addEventListener('timeupdate', timeUpdateHandler);
@@ -51,8 +58,9 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
     return () => {
       audio.removeEventListener('loadedmetadata', loadedMetadataHandler);
       audio.removeEventListener('timeupdate', timeUpdateHandler);
+      cleanState();
     };
-  }, [audio, loadedMetadataHandler, timeUpdateHandler]);
+  }, [audio, loadedMetadataHandler, timeUpdateHandler, cleanState]);
 
   const formatDuration = useCallback((secs: number) => {
     const minutes = Math.floor(secs / 60);
@@ -74,6 +82,7 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
   }, [audio, isPlay]);
 
   const rentHandler = useCallback(async () => {
+    cleanState();
     if (isLoading) return;
     await contractDelegate.writeAsync({ args: [item.id], overrides: { value: parseEther(item.price) } });
   }, [contractDelegate, isLoading, item.id, item.price]);
