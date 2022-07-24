@@ -1,10 +1,18 @@
 import { Fragment } from 'react';
 import { Grid, Loading, Text } from '@nextui-org/react';
+import dynamic from 'next/dynamic';
 import { default as useSWR } from 'swr';
 import { useAccount } from 'wagmi';
-import { NFTCard } from '@components';
 import { fetchNFTsByAddress, NFTItem } from '@lib';
 import type { FC } from 'react';
+
+const NFTCard = dynamic(
+  async () => {
+    const component = await import('@components');
+    return component.NFTCard;
+  },
+  { ssr: false }
+);
 
 export const MyPage: FC<MyPageProps> = (props: MyPageProps) => {
   const {} = props;

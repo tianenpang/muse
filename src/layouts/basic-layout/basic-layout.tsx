@@ -1,9 +1,8 @@
-import { Fragment, useCallback, useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { Container } from '@nextui-org/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { useAccount } from 'wagmi';
-import { ConnectCard, Footer, Header } from '@components';
+import { Footer, Header } from '@components';
 import { pageMotion } from '@styles';
 import { layoutStyles } from './basic-layout.styles';
 import type { FC, ReactNode } from 'react';
@@ -12,17 +11,8 @@ export const BasicLayout: FC<BasicLayoutProps> = (props: BasicLayoutProps) => {
   const { children } = props;
 
   const { pathname } = useRouter();
-  const { isConnected } = useAccount();
 
-  const transitionKey = useMemo<string>(() => {
-    if (pathname === '/') return pathname;
-    return `${pathname}-${isConnected ? 'connected' : 'unconnected'}`;
-  }, [pathname, isConnected]);
-
-  const childrenRender = useCallback(() => {
-    if (isConnected) return children;
-    return <ConnectCard />;
-  }, [children, isConnected]);
+  const transitionKey = useMemo<string>(() => pathname, [pathname]);
 
   return (
     <Fragment>
@@ -30,7 +20,7 @@ export const BasicLayout: FC<BasicLayoutProps> = (props: BasicLayoutProps) => {
       <AnimatePresence initial={false} presenceAffectsLayout exitBeforeEnter>
         {/* @ts-ignore TODO: as motion elements*/}
         <Container key={transitionKey} as={motion.main} css={layoutStyles} md {...pageMotion}>
-          {childrenRender()}
+          {children}
         </Container>
       </AnimatePresence>
       <Footer />
