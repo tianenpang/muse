@@ -5,6 +5,7 @@ import { useContractWrite, useWaitForTransaction } from 'wagmi';
 import { useToast } from '@components/provider';
 import { contract } from '@lib';
 import { cardStyles } from './nft-card.styles';
+import type { NFTItem } from '@lib';
 import type { FC } from 'react';
 
 export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {

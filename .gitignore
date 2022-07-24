@@ -61,3 +61,8 @@ package-lock.json
 
 # lint
 /.husky/_
+
+# graph
+/generated
+/tests
+/utils
