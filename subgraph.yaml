@@ -6,36 +6,32 @@ dataSources:
     name: Muse
     network: mumbai
     source:
-      address: "0x8079434B5B1138CA97068e3F1238B9B9DB760f28"
+      address: '0x8079434B5B1138CA97068e3F1238B9B9DB760f28'
       abi: Muse
+      startBlock: 27301771
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
-        - Approval
-        - ApprovalForAll
-        - SetDelegator
-        - Transfer
-        - minted
-        - rented
-        - withdrawn
+        - User
+        - Token
       abis:
         - name: Muse
           file: ./abis/Muse.json
       eventHandlers:
-        - event: Approval(indexed address,indexed address,indexed uint256)
-          handler: handleApproval
-        - event: ApprovalForAll(indexed address,indexed address,bool)
-          handler: handleApprovalForAll
-        - event: SetDelegator(indexed address,indexed address,indexed uint256)
-          handler: handleSetDelegator
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
         - event: minted(uint256,string,uint256)
-          handler: handleminted
-        - event: rented(uint256,string,address,address)
-          handler: handlerented
-        - event: withdrawn(uint256,string,address,uint256)
-          handler: handlewithdrawn
-      file: ./src/muse.ts
+          handler: handleMinted
+      #        - event: rented(uint256,string,address,address)
+      #          handler: handleRented
+      #        - event: withdrawn(uint256,string,address,uint256)
+      #          handler: handleWithdrawn
+      #        - event: Approval(indexed address,indexed address,indexed uint256)
+      #          handler: handleApproval
+      #        - event: ApprovalForAll(indexed address,indexed address,bool)
+      #          handler: handleApprovalForAll
+      #        - event: SetDelegator(indexed address,indexed address,indexed uint256)
+      #          handler: handleSetDelegator
+      #        - event: Transfer(indexed address,indexed address,indexed uint256)
+      #          handler: handleTransfer
+      file: ./graph/muse.ts
