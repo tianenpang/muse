@@ -67,21 +67,7 @@
       ],
       "@styles/*": [
         "src/styles/*"
-      ],
-      "@contract-type": [
-        "artifacts/contract-type"
-      ],
-      "@contract-type/*": [
-        "artifacts/contract-type/*"
       ]
-    }
-  },
-  "files": [
-    "hardhat.config.ts"
-  ],
-  "ts-node": {
-    "compilerOptions": {
-      "module": "commonjs"
     }
   },
   "include": [
@@ -90,15 +76,11 @@
     "**/*.tsx",
     "**/*.d.ts",
     "next-env.d.ts",
-    "test",
-    "scripts",
-    "artifacts/contract-type"
   ],
   "exclude": [
     ".next",
     ".swc",
     ".docs",
-    ".husky",
     "cache",
     "public",
     "contracts",
