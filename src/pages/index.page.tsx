@@ -1,33 +1,39 @@
 import { Fragment } from 'react';
-import { Loading, Text } from '@nextui-org/react';
-import { BigNumber } from 'ethers';
-import { useContractRead } from 'wagmi';
-import { contract } from '@lib';
-import { HomeGrid } from './home';
-import type { NextPage } from 'next';
+import { Text } from '@nextui-org/react';
+import { SWRConfig } from 'swr';
+import { fetchAllNFTs, queryAllNFTs, queryClient } from '@lib';
+import { GridCard } from './home';
+import type { NFTData, NFTItem } from '@lib';
+import type { InferGetServerSidePropsType, NextPage } from 'next';
 
 const IndexPage: NextPage<IndexPageProps> = (props: IndexPageProps) => {
-  const {} = props;
-
-  const totalSupply = useContractRead({
-    ...contract.muse.config,
-    functionName: 'totalSupply'
-  });
+  const { fallback } = props;
 
   return (
     <Fragment>
-      <Text h3 css={{ transition: '$color' }}>
-        Marketplace
-      </Text>
-      {totalSupply.isLoading ? (
-        <Loading css={{ m: 'auto' }} color="currentColor" size="lg" />
-      ) : (
-        <HomeGrid totalSupply={BigNumber.from(totalSupply.data).toNumber()} />
-      )}
+      <SWRConfig value={{ fallback }}>
+        <Text h3 css={{ transition: '$color' }}>
+          Marketplace
+        </Text>
+        <GridCard />
+      </SWRConfig>
     </Fragment>
   );
 };
 
-interface IndexPageProps {}
+export const getServerSideProps = async () => {
+  const data = await queryClient.query(queryAllNFTs).toPromise();
+  const res: NFTItem[] = await fetchAllNFTs(data.data.tokens as NFTData[]);
+
+  return {
+    props: {
+      fallback: {
+        allnfts: res
+      }
+    }
+  };
+};
+
+interface IndexPageProps extends InferGetServerSidePropsType<typeof getServerSideProps> {}
 
 export default IndexPage;

@@ -1,1 +1,1 @@
-export { HomeGrid } from './home-grid';
+export { GridCard } from './home';

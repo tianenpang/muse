@@ -33,8 +33,8 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
   }, [contractDelegate.isLoading, waitContractDelegate.isLoading]);
 
   const audio = useMemo(() => {
-    return new Audio(`https://nftstorage.link/ipfs/${item.uri}/${item.audio.name}`);
-  }, [item.uri, item.audio.name]);
+    return new Audio(`https://nftstorage.link/ipfs/${item.ipfsCID}/${item.audio.name}`);
+  }, [item.ipfsCID, item.audio.name]);
 
   const loadedMetadataHandler = useCallback(() => {
     setDuration(audio.duration);
@@ -84,8 +84,8 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
   const rentHandler = useCallback(async () => {
     cleanState();
     if (isLoading) return;
-    await contractDelegate.writeAsync({ args: [item.id], overrides: { value: parseEther(item.price) } });
-  }, [cleanState, contractDelegate, isLoading, item.id, item.price]);
+    await contractDelegate.writeAsync({ args: [item.tokenID], overrides: { value: parseEther(item.price) } });
+  }, [cleanState, contractDelegate, isLoading, item.tokenID, item.price]);
 
   return (
     <Fragment>
@@ -116,7 +116,7 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
             height="100%"
             objectFit="cover"
             alt={item.thumbnail.name}
-            src={`https://nftstorage.link/ipfs/${item.uri}/${item.thumbnail.name}`}
+            src={`https://nftstorage.link/ipfs/${item.ipfsCID}/${item.thumbnail.name}`}
           />
         </Card.Body>
         <Card.Footer isBlurred css={cardStyles.footer}>
@@ -142,28 +142,6 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
     </Fragment>
   );
 };
-
-export interface NFTItem {
-  id: number;
-  uri: string;
-  name: string;
-  description: string;
-  price: string;
-  thumbnail: {
-    name: string;
-    originalName: string;
-    type: string;
-    size: number;
-    datetime: number;
-  };
-  audio: {
-    name: string;
-    originalName: string;
-    type: string;
-    size: number;
-    datetime: number;
-  };
-}
 
 interface NFTCardProps {
   item: NFTItem;

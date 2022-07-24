@@ -1,6 +1,7 @@
 import { Fragment, useCallback, useMemo } from 'react';
 import { Button, Dropdown } from '@nextui-org/react';
 import { default as NextImage } from 'next/image';
+import { useRouter } from 'next/router';
 import { Category as CategoryIcon, Logout as LogoutIcon, Swap as SwapIcon, Wallet as WalletIcon } from 'react-iconly';
 import { useDisconnect } from 'wagmi';
 import { Avatar } from '@components';
@@ -10,6 +11,8 @@ import type { FC, Key, ReactNode } from 'react';
 export const ConnectedButton: FC<ConnectedButtonProps> = (props: ConnectedButtonProps) => {
   const { chain, account, openChainModal, ...rest } = props;
 
+  const { push } = useRouter();
+
   const { disconnect } = useDisconnect();
 
   const chainIcon = useMemo<ReactNode>(() => {
@@ -18,8 +21,11 @@ export const ConnectedButton: FC<ConnectedButtonProps> = (props: ConnectedButton
   }, [chain.iconUrl, chain.name]);
 
   const onActionHandler = useCallback(
-    (key: Key) => {
+    async (key: Key) => {
       switch (key) {
+        case 'my':
+          await push('/my');
+          break;
         case 'network':
           openChainModal();
           break;
@@ -48,7 +54,7 @@ export const ConnectedButton: FC<ConnectedButtonProps> = (props: ConnectedButton
           </Button>
         </Dropdown.Trigger>
         <Dropdown.Menu aria-label="Account Actions" onAction={(key: Key) => onActionHandler(key)}>
-          <Dropdown.Item key="assets" textValue="Assets" icon={<CategoryIcon primaryColor="currentColor" set="light" />}>
+          <Dropdown.Item key="my" textValue=" My NFTs" icon={<CategoryIcon primaryColor="currentColor" set="light" />}>
             My NFTs
           </Dropdown.Item>
           <Dropdown.Item key="balance" textValue="Balance" icon={<WalletIcon primaryColor="currentColor" set="light" />}>
